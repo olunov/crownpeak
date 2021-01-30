@@ -5,7 +5,10 @@
  * General functionality for crownpeak.
  */
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+
+define('CROWNPEAK_JS_PATH', 'public://js');
 
 /**
  * Implements hook_help().
@@ -19,4 +22,41 @@ function crownpeak_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<h3>' . t('Uses') . '</h3>';
       return $output;
   }
+}
+
+/**
+ * Implements hook_rebuild().
+ */
+function crownpeak_rebuild() {
+  crownpeak_generate_js();
+}
+
+/**
+ * Build JS based on form settings.
+ */
+function crownpeak_generate_js() {
+  $configs = \Drupal::config('crownpeak.settings');
+
+  $js = '';
+
+  // Generate suffix for new js file.
+  $js_suffix = \Drupal::time()->getRequestTime();
+
+  // Delete old js file if exists.
+  $js_old_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
+  if ($js_old_suffix) {
+    \Drupal::service('file_system')->delete(CROWNPEAK_JS_PATH . '/crownpeak_' . $js_old_suffix . '.js');
+  }
+
+  // Save suffix to db.
+  \Drupal::state()->set('crownpeak_js_suffix', $js_suffix);
+
+  // Save the JS to a file in the files directory.
+  // make directory writable if it is read-only.
+  \Drupal::service('file_system')->prepareDirectory(CROWNPEAK_JS_PATH, FileSystemInterface::MODIFY_PERMISSIONS);
+  \Drupal::service('file_system')->saveData($js, CROWNPEAK_JS_PATH . '/crownpeak_' . $js_suffix . '.js', FileSystemInterface::EXISTS_REPLACE);
+
+  // We should flush JS cache so that aggregated JS gets rebuilt.
+  \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+  _drupal_flush_css_js();
 }

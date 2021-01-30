@@ -311,6 +311,21 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $configs->get('feedback_form_link'),
     ];
 
+    $form['debug'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Debug'),
+    ];
+
+    $crownpeak_js_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
+    $crownpeak_current_js = CROWNPEAK_JS_PATH . '/crownpeak_' . $crownpeak_js_suffix . '.js';
+
+    $form['debug']['info'] = [
+      '#type' => 'markup',
+      '#markup' => $crownpeak_current_js,
+    ];
+
+    $form['#attached']['library'][] = 'crownpeak/crownpeak.admin';
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -349,7 +364,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('mobile_trigger_horizontal_offset', $values['mobile_trigger_horizontal_offset'])
       ->set('mobile_trigger_vertical_offset', $values['mobile_trigger_vertical_offset'])
       ->save();
-
+    drupal_flush_all_caches();
     parent::submitForm($form, $form_state);
   }
 

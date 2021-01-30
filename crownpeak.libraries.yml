@@ -1,0 +1,5 @@
+crownpeak.admin:
+  version: VERSION
+  css:
+    theme:  
+      css/crownpeak.admin.css : {}
