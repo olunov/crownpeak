@@ -35,20 +35,6 @@ class SettingsForm extends ConfigFormBase {
 
     $configs = $this->config('crownpeak.settings');
 
-    $form['accessibility_statement_link'] = [
-      '#type' => 'url',
-      '#title' => $this->t('Accessibility Statement Link'),
-      '#description' => $this->t('Specify here URL for page with accessibility statement.'),
-      '#default_value' => $configs->get('accessibility_statement_link'),
-    ];
-
-    $form['feedback_form_link'] = [
-      '#type' => 'url',
-      '#title' => $this->t('Feedback Form Link'),
-      '#description' => $this->t('Specify here URL for feedback form.'),
-      '#default_value' => $configs->get('feedback_form_link'),
-    ];
-
     $form['hide_trigger_button'] = [
       '#type' => 'select',
       '#title' => $this->t('Hide Trigger Button'),
@@ -112,18 +98,6 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['show_on_mobile'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Show On Mobile?'),
-      '#description' => $this->t('Select if widget should be shown for mobile devices.'),
-      '#default_value' => $configs->get('show_on_mobile'),
-      '#options' => [
-        'true' => $this->t('Show'),
-        'false' => $this->t('Hide'),
-      ],
-      '#required' => TRUE,
-    ];
-
     $form['trigger_horizontal_position'] = [
       '#type' => 'select',
       '#title' => $this->t('Trigger Horizontal Position'),
@@ -149,32 +123,6 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    // @TODO: add form state based on `show_on_mobile`.
-    $form['mobile_trigger_horizontal_position'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Mobile Trigger Horizontal Position'),
-      '#description' => $this->t('Select horizontal position for trigger on mobile devices.'),
-      '#default_value' => $configs->get('mobile_trigger_horizontal_position'),
-      '#options' => [
-        'left' => $this->t('Left'),
-        'right' => $this->t('Right'),
-      ],
-      '#required' => TRUE,
-    ];
-
-    $form['mobile_trigger_vertical_position'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Mobile Trigger Vertical Position'),
-      '#description' => $this->t('Select vertical position for trigger.'),
-      '#default_value' => $configs->get('mobile_trigger_vertical_position'),
-      '#options' => [
-        'top' => $this->t('Top'),
-        'center' => $this->t('Center'),
-        'bottom' => $this->t('Bottom'),
-      ],
-      '#required' => TRUE,
-    ];
-
     $form['trigger_button_size'] = [
       '#type' => 'select',
       '#title' => $this->t('Trigger Button Size'),
@@ -188,38 +136,13 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['mobile_trigger_size'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Mobile Trigger Size'),
-      '#description' => $this->t('Select button size for trigger on mobile devices.'),
-      '#default_value' => $configs->get('mobile_trigger_size'),
-      '#options' => [
-        'small' => $this->t('Small'),
-        'medium' => $this->t('Medium'),
-        'big' => $this->t('Big'),
-      ],
-      '#required' => TRUE,
-    ];
+
 
     $form['trigger_button_shape'] = [
       '#type' => 'select',
       '#title' => $this->t('Trigger Button Shape'),
       '#description' => $this->t('Select button shape for trigger button.'),
       '#default_value' => $configs->get('trigger_button_shape'),
-      '#options' => [
-        '50%' => $this->t('Round'),
-        '0%' => $this->t('Square'),
-        '10px' => $this->t('Squircle Big'),
-        '5px' => $this->t('Squircle Small'),
-      ],
-      '#required' => TRUE,
-    ];
-
-    $form['trigger_mobile_shape'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Trigger Mobile Shape'),
-      '#description' => $this->t('Select button shape for trigger button on mobile devices.'),
-      '#default_value' => $configs->get('trigger_mobile_shape'),
       '#options' => [
         '50%' => $this->t('Round'),
         '0%' => $this->t('Square'),
@@ -275,7 +198,85 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['mobile_trigger_horizontal_offset'] = [
+    $form['mobile_configs'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Mobile Configuration'),
+    ];
+
+    $form['mobile_configs']['show_on_mobile'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Show On Mobile?'),
+      '#description' => $this->t('Select if widget should be shown for mobile devices.'),
+      '#default_value' => $configs->get('show_on_mobile'),
+      '#options' => [
+        'true' => $this->t('Show'),
+        'false' => $this->t('Hide'),
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['mobile_configs']['details'] = [
+      '#type' => 'fieldset',
+      '#states' => array(
+        'visible' => array(
+          ':input[name="show_on_mobile"]' => array('value' => 'true'),
+        ),
+      ),
+    ];
+
+    $form['mobile_configs']['details']['mobile_trigger_horizontal_position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Mobile Trigger Horizontal Position'),
+      '#description' => $this->t('Select horizontal position for trigger on mobile devices.'),
+      '#default_value' => $configs->get('mobile_trigger_horizontal_position'),
+      '#options' => [
+        'left' => $this->t('Left'),
+        'right' => $this->t('Right'),
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['mobile_configs']['details']['mobile_trigger_vertical_position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Mobile Trigger Vertical Position'),
+      '#description' => $this->t('Select vertical position for trigger.'),
+      '#default_value' => $configs->get('mobile_trigger_vertical_position'),
+      '#options' => [
+        'top' => $this->t('Top'),
+        'center' => $this->t('Center'),
+        'bottom' => $this->t('Bottom'),
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['mobile_configs']['details']['mobile_trigger_size'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Mobile Trigger Size'),
+      '#description' => $this->t('Select button size for trigger on mobile devices.'),
+      '#default_value' => $configs->get('mobile_trigger_size'),
+      '#options' => [
+        'small' => $this->t('Small'),
+        'medium' => $this->t('Medium'),
+        'big' => $this->t('Big'),
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['mobile_configs']['details']['mobile_trigger_shape'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Trigger Mobile Shape'),
+      '#description' => $this->t('Select button shape for trigger button on mobile devices.'),
+      '#default_value' => $configs->get('mobile_trigger_shape'),
+      '#options' => [
+        '50%' => $this->t('Round'),
+        '0%' => $this->t('Square'),
+        '10px' => $this->t('Squircle Big'),
+        '5px' => $this->t('Squircle Small'),
+      ],
+      '#required' => TRUE,
+    ];
+
+    $form['mobile_configs']['details']['mobile_trigger_horizontal_offset'] = [
       '#type' => 'number',
       '#title' => $this->t('Trigger Horizontal Offset'),
       '#description' => $this->t('Specify horizontal offset on mobile devices.'),
@@ -283,12 +284,31 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['mobile_trigger_vertical_offset'] = [
+    $form['mobile_configs']['details']['mobile_trigger_vertical_offset'] = [
       '#type' => 'number',
       '#title' => $this->t('Trigger Vertical Offset'),
       '#description' => $this->t('Specify vertical offset on mobile devices.'),
       '#default_value' => $configs->get('mobile_trigger_vertical_offset'),
       '#required' => TRUE,
+    ];
+
+    $form['links_configs'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Links'),
+    ];
+
+    $form['links_configs']['accessibility_statement_link'] = [
+      '#type' => 'url',
+      '#title' => $this->t('Accessibility Statement Link'),
+      '#description' => $this->t('Specify here URL for page with accessibility statement.'),
+      '#default_value' => $configs->get('accessibility_statement_link'),
+    ];
+
+    $form['links_configs']['feedback_form_link'] = [
+      '#type' => 'url',
+      '#title' => $this->t('Feedback Form Link'),
+      '#description' => $this->t('Specify here URL for feedback form.'),
+      '#default_value' => $configs->get('feedback_form_link'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -322,7 +342,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('trigger_button_size', $values['trigger_button_size'])
       ->set('mobile_trigger_size', $values['mobile_trigger_size'])
       ->set('trigger_button_shape', $values['trigger_button_shape'])
-      ->set('trigger_mobile_shape', $values['trigger_mobile_shape'])
+      ->set('mobile_trigger_shape', $values['mobile_trigger_shape'])
       ->set('trigger_button_icon', $values['trigger_button_icon'])
       ->set('trigger_horizontal_offset', $values['trigger_horizontal_offset'])
       ->set('trigger_vertical_offset', $values['trigger_vertical_offset'])
