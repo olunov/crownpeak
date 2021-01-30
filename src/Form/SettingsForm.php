@@ -310,18 +310,18 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     // Visibility settings.
-    $form['showing_settings'] = [
+    $form['display_settings'] = [
       '#type' => 'vertical_tabs',
-      '#title' => $this->t('Showing settings'),
+      '#title' => $this->t('Display settings'),
     ];
 
-    $form['tracking']['page_visibility_settings'] = [
+    $form['display']['page_visibility_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Pages'),
-      '#group' => 'showing_settings',
+      '#group' => 'display_settings',
     ];
 
-    $form['tracking']['page_visibility_settings']['visibility_request_path_mode'] = [
+    $form['display']['page_visibility_settings']['visibility_request_path_mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('Add widget to specific pages'),
       '#options' => [
@@ -332,7 +332,7 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     $visibility_request_path_pages = $configs->get('visibility_request_path_pages');
-    $form['tracking']['page_visibility_settings']['visibility_request_path_pages'] = [
+    $form['display']['page_visibility_settings']['visibility_request_path_pages'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Pages'),
       '#title_display' => 'invisible',
@@ -341,13 +341,13 @@ class SettingsForm extends ConfigFormBase {
       '#rows' => 10,
     ];
 
-    $form['tracking']['role_visibility_settings'] = [
+    $form['display']['role_visibility_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Roles'),
-      '#group' => 'showing_settings',
+      '#group' => 'display_settings',
     ];
 
-    $form['tracking']['role_visibility_settings']['visibility_user_role_mode'] = [
+    $form['display']['role_visibility_settings']['visibility_user_role_mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('Add widget for specific roles'),
       '#options' => [
@@ -358,7 +358,7 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     $visibility_user_role_roles = $configs->get('visibility_user_role_roles');
-    $form['tracking']['role_visibility_settings']['visibility_user_role_roles'] = [
+    $form['display']['role_visibility_settings']['visibility_user_role_roles'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Roles'),
       '#default_value' => !empty($visibility_user_role_roles) ? $visibility_user_role_roles : [],
@@ -423,7 +423,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('visibility_user_role_mode', $values['visibility_user_role_mode'])
       ->set('visibility_user_role_roles', $values['visibility_user_role_roles'])
       ->save();
-    
+
     drupal_flush_all_caches();
     parent::submitForm($form, $form_state);
   }
