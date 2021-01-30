@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Default theme implementation for generating JS.
+ *
+ * Available variables:
+ * - crownpeak_configs: A list of buttons that may be added multiple times.
+ *
+ * @see template_preprocess_crownpeak_js()
+ *
+ * @ingroup themeable
+ */
+#}
+
+acsbJS.init({
+  statementLink : '{{ crownpeak_configs.accessibility_statement_link }}',
+  feedbackLink : '{{ crownpeak_configs.feedback_form_link }}',
+  footerHtml : '',
+  hideMobile : {{ crownpeak_configs.show_on_mobile }},
+  hideTrigger : {{ crownpeak_configs.hide_trigger_button }},
+  language : '{{ crownpeak_configs.interface_language }}',
+  position : '{{ crownpeak_configs.interface_position }}',
+  leadColor : '{{ crownpeak_configs.interface_lead_color }}',
+  triggerColor : '{{ crownpeak_configs.trigger_button_color }}',
+  triggerRadius : '{{ crownpeak_configs.trigger_button_shape }}',
+  triggerPositionX : '{{ crownpeak_configs.trigger_horizontal_position }}',
+  triggerPositionY : '{{ crownpeak_configs.trigger_vertical_position }}',
+  triggerIcon : '{{ crownpeak_configs.trigger_button_icon }}',
+  triggerSize : '{{ crownpeak_configs.trigger_button_size }}',
+  triggerOffsetX : '{{ crownpeak_configs.trigger_horizontal_offset }}',
+  triggerOffsetY : '{{ crownpeak_configs.trigger_vertical_offset }}',
+  mobile : {
+    triggerSize: '{{ crownpeak_configs.mobile_trigger_size }}',
+    triggerPositionX : '{{ crownpeak_configs.mobile_trigger_horizontal_position }}',
+    triggerPositionY : '{{ crownpeak_configs.mobile_trigger_vertical_position }}',
+    triggerOffsetX : '{{ crownpeak_configs.mobile_trigger_horizontal_offset }}',
+    triggerOffsetY : '{{ crownpeak_configs.mobile_trigger_vertical_offset }}',
+    triggerRadius : '{{ crownpeak_configs.mobile_trigger_shape }}'
+  }
+});
+

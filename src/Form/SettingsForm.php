@@ -136,8 +136,6 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-
-
     $form['trigger_button_shape'] = [
       '#type' => 'select',
       '#title' => $this->t('Trigger Button Shape'),
@@ -321,7 +319,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['debug']['info'] = [
       '#type' => 'markup',
-      '#markup' => $crownpeak_current_js,
+      '#markup' => file_create_url($crownpeak_current_js),
     ];
 
     $form['#attached']['library'][] = 'crownpeak/crownpeak.admin';

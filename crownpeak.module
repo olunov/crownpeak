@@ -5,6 +5,7 @@
  * General functionality for crownpeak.
  */
 
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -25,6 +26,28 @@ function crownpeak_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function crownpeak_theme() {
+  return [
+    'crownpeak_js' => [
+      'variables' => [
+        'crownpeak_configs' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Insert JavaScript to the appropriate scope/region of the page.
+ */
+function crownpeak_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'crownpeak/crownpeak.js';
+}
+
+/**
  * Implements hook_rebuild().
  */
 function crownpeak_rebuild() {
@@ -36,8 +59,38 @@ function crownpeak_rebuild() {
  */
 function crownpeak_generate_js() {
   $configs = \Drupal::config('crownpeak.settings');
+  $js_path = CROWNPEAK_JS_PATH;
 
-  $js = '';
+  // Rendering JS based on form settings.
+  $render_array_js = [
+    '#theme' => 'crownpeak_js',
+    '#crownpeak_configs' => [
+      'accessibility_statement_link' => $configs->get('accessibility_statement_link'),
+      'feedback_form_link' => $configs->get('feedback_form_link'),
+      'hide_trigger_button' => $configs->get('hide_trigger_button'),
+      'interface_language' => $configs->get('interface_language'),
+      'interface_lead_color' => $configs->get('interface_lead_color'),
+      'trigger_button_color' => $configs->get('trigger_button_color'),
+      'interface_position' => $configs->get('interface_position'),
+      'show_on_mobile' => $configs->get('show_on_mobile'),
+      'trigger_horizontal_position' => $configs->get('trigger_horizontal_position'),
+      'trigger_vertical_position' => $configs->get('trigger_vertical_position'),
+      'mobile_trigger_horizontal_position' => $configs->get('mobile_trigger_horizontal_position'),
+      'mobile_trigger_vertical_position' => $configs->get('mobile_trigger_vertical_position'),
+      'trigger_button_size' => $configs->get('trigger_button_size'),
+      'mobile_trigger_size' => $configs->get('mobile_trigger_size'),
+      'trigger_button_shape' => $configs->get('trigger_button_shape'),
+      'mobile_trigger_shape' => $configs->get('mobile_trigger_shape'),
+      'trigger_button_icon' => $configs->get('trigger_button_icon'),
+      'trigger_horizontal_offset' => $configs->get('trigger_horizontal_offset'),
+      'trigger_vertical_offset' => $configs->get('trigger_vertical_offset'),
+      'mobile_trigger_horizontal_offset' => $configs->get('mobile_trigger_horizontal_offset'),
+      'mobile_trigger_vertical_offset' => $configs->get('mobile_trigger_vertical_offset'),
+    ],
+  ];
+
+  $renderer = \Drupal::service('renderer');
+  $crownpeak_js = $renderer->renderPlain($render_array_js);
 
   // Generate suffix for new js file.
   $js_suffix = \Drupal::time()->getRequestTime();
@@ -45,7 +98,7 @@ function crownpeak_generate_js() {
   // Delete old js file if exists.
   $js_old_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
   if ($js_old_suffix) {
-    \Drupal::service('file_system')->delete(CROWNPEAK_JS_PATH . '/crownpeak_' . $js_old_suffix . '.js');
+    \Drupal::service('file_system')->delete($js_path . '/crownpeak_' . $js_old_suffix . '.js');
   }
 
   // Save suffix to db.
@@ -53,10 +106,23 @@ function crownpeak_generate_js() {
 
   // Save the JS to a file in the files directory.
   // make directory writable if it is read-only.
-  \Drupal::service('file_system')->prepareDirectory(CROWNPEAK_JS_PATH, FileSystemInterface::MODIFY_PERMISSIONS);
-  \Drupal::service('file_system')->saveData($js, CROWNPEAK_JS_PATH . '/crownpeak_' . $js_suffix . '.js', FileSystemInterface::EXISTS_REPLACE);
+  \Drupal::service('file_system')->prepareDirectory($js_path, FileSystemInterface::MODIFY_PERMISSIONS);
+  \Drupal::service('file_system')->saveData($crownpeak_js, $js_path . '/crownpeak_' . $js_suffix . '.js', FileSystemInterface::EXISTS_REPLACE);
 
   // We should flush JS cache so that aggregated JS gets rebuilt.
   \Drupal::service('asset.js.collection_optimizer')->deleteAll();
   _drupal_flush_css_js();
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function crownpeak_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  foreach ($javascript as $key => $script) {
+    if (strpos($key, '[crownpeak_js_placeholder]') !== FALSE) {
+      $crownpeak_js_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
+      $crownpeak_current_js = CROWNPEAK_JS_PATH . '/crownpeak_' . $crownpeak_js_suffix . '.js';
+      $javascript[$key]['data'] = file_url_transform_relative(file_create_url($crownpeak_current_js));
+    }
+  }
 }

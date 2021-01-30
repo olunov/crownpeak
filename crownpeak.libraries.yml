@@ -1,5 +1,10 @@
 crownpeak.admin:
   version: VERSION
   css:
-    theme:  
+    theme:
       css/crownpeak.admin.css : {}
+
+crownpeak.js:
+  js:
+    https://acsbap.com/apps/app/assets/js/acsb.js: { type: external, minified: true }
+    //[crownpeak_js_placeholder]: {}
