@@ -47,6 +47,20 @@ function crownpeak_page_attachments(array &$page) {
   $page['#attached']['library'][] = 'crownpeak/crownpeak.js';
 }
 
+
+/**
+ * Implements hook_js_alter().
+ */
+function crownpeak_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  foreach ($javascript as $key => $script) {
+    if (strpos($key, '[crownpeak_js_placeholder]') !== FALSE) {
+      $crownpeak_js_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
+      $crownpeak_current_js = CROWNPEAK_JS_PATH . '/crownpeak_' . $crownpeak_js_suffix . '.js';
+      $javascript[$key]['data'] = file_url_transform_relative(file_create_url($crownpeak_current_js));
+    }
+  }
+}
+
 /**
  * Implements hook_rebuild().
  */
@@ -112,17 +126,4 @@ function crownpeak_generate_js() {
   // We should flush JS cache so that aggregated JS gets rebuilt.
   \Drupal::service('asset.js.collection_optimizer')->deleteAll();
   _drupal_flush_css_js();
-}
-
-/**
- * Implements hook_js_alter().
- */
-function crownpeak_js_alter(&$javascript, AttachedAssetsInterface $assets) {
-  foreach ($javascript as $key => $script) {
-    if (strpos($key, '[crownpeak_js_placeholder]') !== FALSE) {
-      $crownpeak_js_suffix = \Drupal::state()->get('crownpeak_js_suffix') ?: NULL;
-      $crownpeak_current_js = CROWNPEAK_JS_PATH . '/crownpeak_' . $crownpeak_js_suffix . '.js';
-      $javascript[$key]['data'] = file_url_transform_relative(file_create_url($crownpeak_current_js));
-    }
-  }
 }

@@ -309,6 +309,63 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $configs->get('feedback_form_link'),
     ];
 
+    // Visibility settings.
+    $form['showing_settings'] = [
+      '#type' => 'vertical_tabs',
+      '#title' => $this->t('Showing settings'),
+    ];
+
+    $form['tracking']['page_visibility_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Pages'),
+      '#group' => 'showing_settings',
+    ];
+
+    $form['tracking']['page_visibility_settings']['visibility_request_path_mode'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Add widget to specific pages'),
+      '#options' => [
+        $this->t('Every page except the listed pages'),
+        $this->t('The listed pages only'),
+      ],
+      '#default_value' => $configs->get('visibility_request_path_mode'),
+    ];
+
+    $visibility_request_path_pages = $configs->get('visibility_request_path_pages');
+    $form['tracking']['page_visibility_settings']['visibility_request_path_pages'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Pages'),
+      '#title_display' => 'invisible',
+      '#default_value' => !empty($visibility_request_path_pages) ? $visibility_request_path_pages : '',
+      '#description' => $this->t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", ['%blog' => '/blog', '%blog-wildcard' => '/blog/*', '%front' => '<front>']),
+      '#rows' => 10,
+    ];
+
+    $form['tracking']['role_visibility_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Roles'),
+      '#group' => 'showing_settings',
+    ];
+
+    $form['tracking']['role_visibility_settings']['visibility_user_role_mode'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Add widget for specific roles'),
+      '#options' => [
+        $this->t('Add to the selected roles only'),
+        $this->t('Add to every role except the selected ones'),
+      ],
+      '#default_value' => $configs->get('visibility_user_role_mode'),
+    ];
+
+    $visibility_user_role_roles = $configs->get('visibility_user_role_roles');
+    $form['tracking']['role_visibility_settings']['visibility_user_role_roles'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Roles'),
+      '#default_value' => !empty($visibility_user_role_roles) ? $visibility_user_role_roles : [],
+      '#options' => array_map('\Drupal\Component\Utility\Html::escape', user_role_names()),
+      '#description' => $this->t('If none of the roles are selected, widget will be shown for all users. If a user has any of the roles checked, widget will be shown for that user (or excluded, depending on the setting above).'),
+    ];
+
     $form['debug'] = [
       '#type' => 'details',
       '#title' => $this->t('Debug'),
@@ -361,7 +418,12 @@ class SettingsForm extends ConfigFormBase {
       ->set('trigger_vertical_offset', $values['trigger_vertical_offset'])
       ->set('mobile_trigger_horizontal_offset', $values['mobile_trigger_horizontal_offset'])
       ->set('mobile_trigger_vertical_offset', $values['mobile_trigger_vertical_offset'])
+      ->set('visibility_request_path_mode', $values['visibility_request_path_mode'])
+      ->set('visibility_request_path_pages', $values['visibility_request_path_pages'])
+      ->set('visibility_user_role_mode', $values['visibility_user_role_mode'])
+      ->set('visibility_user_role_roles', $values['visibility_user_role_roles'])
       ->save();
+    
     drupal_flush_all_caches();
     parent::submitForm($form, $form_state);
   }
