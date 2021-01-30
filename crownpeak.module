@@ -44,7 +44,10 @@ function crownpeak_theme() {
  * Insert JavaScript to the appropriate scope/region of the page.
  */
 function crownpeak_page_attachments(array &$page) {
-  $page['#attached']['library'][] = 'crownpeak/crownpeak.js';
+  $account = \Drupal::currentUser();
+  if (_crownpeak_visibility_roles($account) || _crownpeak_visibility_pages()) {
+    $page['#attached']['library'][] = 'crownpeak/crownpeak.js';
+  }
 }
 
 
@@ -126,4 +129,83 @@ function crownpeak_generate_js() {
   // We should flush JS cache so that aggregated JS gets rebuilt.
   \Drupal::service('asset.js.collection_optimizer')->deleteAll();
   _drupal_flush_css_js();
+}
+
+/**
+ * Checking visibility for user roles.
+ *
+ * Based on visibility setting this function returns TRUE if JS code should
+ * be added for the current role and otherwise FALSE.
+ *
+ * @param object $account
+ *   A user object containing an array of roles to check.
+ *
+ * @return bool
+ *   TRUE if JS code should be added for the current role and otherwise FALSE.
+ */
+function _crownpeak_visibility_roles($account) {
+  $config = \Drupal::config('crownpeak.settings');
+  $enabled = $visibility_user_role_mode = $config->get('visibility_user_role_mode');
+  $visibility_user_role_roles = $config->get('visibility_user_role_roles');
+  if (count($visibility_user_role_roles) > 0) {
+    // One or more roles are selected.
+    foreach (array_values($account->getRoles()) as $user_role) {
+      // Is the current user a member of one of these roles?
+      if (in_array($user_role, $visibility_user_role_roles)) {
+        // Current user is a member of a role widget should be shown/excluded
+        // from tracking.
+        $enabled = !$visibility_user_role_mode;
+        break;
+      }
+    }
+  }
+  else {
+    // No role is selected for showing widget, therefore all roles should be
+    // tracked.
+    $enabled = TRUE;
+  }
+
+  return $enabled;
+}
+
+/**
+ * Checking visibility check for pages.
+ *
+ * Based on visibility setting this function returns TRUE if JS code should
+ * be added to the current page and otherwise FALSE.
+ */
+function _crownpeak_visibility_pages() {
+  static $page_match;
+
+  // Cache visibility result if function is called more than once.
+  if (!isset($page_match)) {
+    $config = \Drupal::config('crownpeak.settings');
+    $visibility_request_path_mode = $config->get('visibility_request_path_mode');
+    $visibility_request_path_pages = $config->get('visibility_request_path_pages');
+
+    // Match path if necessary.
+    if (!empty($visibility_request_path_pages)) {
+      // Convert path to lowercase. This allows comparison of the same path
+      // with different case. Ex: /Page, /page, /PAGE.
+      $pages = mb_strtolower($visibility_request_path_pages);
+      if ($visibility_request_path_mode < 2) {
+        // Compare the lowercase path alias (if any) and internal path.
+        $path = \Drupal::service('path.current')->getPath();
+        $path_alias = mb_strtolower(\Drupal::service('path_alias.manager')->getAliasByPath($path));
+        $page_match = \Drupal::service('path.matcher')->matchPath($path_alias, $pages) || (($path != $path_alias) && \Drupal::service('path.matcher')->matchPath($path, $pages));
+        // When $visibility_request_path_mode has a value of 0, the tracking
+        // code is displayed on all pages except those listed in $pages. When
+        // set to 1, it is displayed only on those pages listed in $pages.
+        $page_match = !($visibility_request_path_mode xor $page_match);
+      }
+      else {
+        $page_match = FALSE;
+      }
+    }
+    else {
+      $page_match = TRUE;
+    }
+
+  }
+  return $page_match;
 }
