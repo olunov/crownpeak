@@ -1,0 +1,7 @@
+crownpeak.admin_settings:
+  path: '/admin/config/system/crownpeak'
+  defaults:
+    _form: '\Drupal\crownpeak\Form\SettingsForm'
+    _title: 'Crownpeak Accessibility Settings'
+  requirements:
+    _permission: 'administer site configuration'

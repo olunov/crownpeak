@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * General functionality for crownpeak.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function crownpeak_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.crownpeak':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Crownpeak Accessibility provides an integration with crownpeak service.') . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      return $output;
+  }
+}

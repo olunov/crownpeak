@@ -1,0 +1,6 @@
+name: Crownpeak Accessibility
+type: module
+description: 'Provides an integration with crownpeak service.'
+core_version_requirement: ^8.9 || ^9
+package: Accessibility
+configure: crownpeak.admin_settings

@@ -1,0 +1,19 @@
+{
+  "name": "drupal/crownpeak",
+  "description": "Provides an integration with crownpeak service.",
+  "type": "drupal-module",
+  "keywords": ["Drupal", "Accessibility", "Content Display"],
+  "homepage": "https://www.drupal.org/project/crownpeak",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Oleksandr Lunov (alunyov)",
+      "homepage": "https://www.drupal.org/u/alunyov",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/crownpeak",
+    "source": "http://cgit.drupalcode.org/crownpeak"
+  }
+}
