@@ -14,7 +14,7 @@ trigger_button_size: medium
 mobile_trigger_size: small
 trigger_button_shape: 50%
 trigger_mobile_shape: 10px
-trigger_button_icon: default
+trigger_button_icon: people
 trigger_horizontal_offset: '20'
 trigger_vertical_offset: '20'
 mobile_trigger_horizontal_offset: '0'

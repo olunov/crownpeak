@@ -2,4 +2,55 @@
  * @file
  * Contains CSS styles for crownpeak config form.
  */
+#edit-trigger-button-icon{
+  max-width: 500px;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap: 20px;
+}
+#edit-trigger-button-icon .form-type-radio{
+  margin: 10px 0px 10px 0px;
+}
 
+#edit-trigger-button-icon .form-type-radio label {
+  display: none;
+}
+
+#edit-trigger-button-icon .form-radio:after {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  margin: 0px 0px 0px 15px;
+  background-size: 50px 50px;
+  content: ' ';
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-display:after{
+  background-image: url(../images/icons/display.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-display2:after{
+  background-image: url(../images/icons/display2.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-display3:after{
+  background-image: url(../images/icons/display3.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-help:after{
+  background-image: url(../images/icons/help.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-people:after{
+  background-image: url(../images/icons/people.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-people2:after{
+  background-image: url(../images/icons/people2.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-settings:after{
+  background-image: url(../images/icons/settings.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-settings2:after{
+  background-image: url(../images/icons/settings2.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-wheels:after{
+  background-image: url(../images/icons/wheels.svg);
+}
+#edit-trigger-button-icon .form-radio#edit-trigger-button-icon-wheels2:after{
+  background-image: url(../images/icons/wheels2.svg);
+}
