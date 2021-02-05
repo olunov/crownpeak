@@ -74,40 +74,47 @@ function crownpeak_rebuild() {
 /**
  * Build JS based on form settings.
  */
-function crownpeak_generate_js() {
-  $configs = \Drupal::config('crownpeak.settings');
-  $js_path = CROWNPEAK_JS_PATH;
-
+function crownpeak_build_js($crownpeak_configs) {
   // Rendering JS based on form settings.
   $render_array_js = [
     '#theme' => 'crownpeak_js',
     '#crownpeak_configs' => [
-      'accessibility_statement_link' => $configs->get('accessibility_statement_link'),
-      'feedback_form_link' => $configs->get('feedback_form_link'),
-      'hide_trigger_button' => $configs->get('hide_trigger_button'),
-      'interface_language' => $configs->get('interface_language'),
-      'interface_lead_color' => $configs->get('interface_lead_color'),
-      'trigger_button_color' => $configs->get('trigger_button_color'),
-      'interface_position' => $configs->get('interface_position'),
-      'hide_on_mobile' => $configs->get('hide_on_mobile'),
-      'trigger_horizontal_position' => $configs->get('trigger_horizontal_position'),
-      'trigger_vertical_position' => $configs->get('trigger_vertical_position'),
-      'mobile_trigger_horizontal_position' => $configs->get('mobile_trigger_horizontal_position'),
-      'mobile_trigger_vertical_position' => $configs->get('mobile_trigger_vertical_position'),
-      'trigger_button_size' => $configs->get('trigger_button_size'),
-      'mobile_trigger_size' => $configs->get('mobile_trigger_size'),
-      'trigger_button_shape' => $configs->get('trigger_button_shape'),
-      'mobile_trigger_shape' => $configs->get('mobile_trigger_shape'),
-      'trigger_button_icon' => $configs->get('trigger_button_icon'),
-      'trigger_horizontal_offset' => $configs->get('trigger_horizontal_offset'),
-      'trigger_vertical_offset' => $configs->get('trigger_vertical_offset'),
-      'mobile_trigger_horizontal_offset' => $configs->get('mobile_trigger_horizontal_offset'),
-      'mobile_trigger_vertical_offset' => $configs->get('mobile_trigger_vertical_offset'),
+      'accessibility_statement_link' => $crownpeak_configs->get('accessibility_statement_link'),
+      'feedback_form_link' => $crownpeak_configs->get('feedback_form_link'),
+      'hide_trigger_button' => $crownpeak_configs->get('hide_trigger_button'),
+      'interface_language' => $crownpeak_configs->get('interface_language'),
+      'interface_lead_color' => $crownpeak_configs->get('interface_lead_color'),
+      'trigger_button_color' => $crownpeak_configs->get('trigger_button_color'),
+      'interface_position' => $crownpeak_configs->get('interface_position'),
+      'hide_on_mobile' => $crownpeak_configs->get('hide_on_mobile'),
+      'trigger_horizontal_position' => $crownpeak_configs->get('trigger_horizontal_position'),
+      'trigger_vertical_position' => $crownpeak_configs->get('trigger_vertical_position'),
+      'mobile_trigger_horizontal_position' => $crownpeak_configs->get('mobile_trigger_horizontal_position'),
+      'mobile_trigger_vertical_position' => $crownpeak_configs->get('mobile_trigger_vertical_position'),
+      'trigger_button_size' => $crownpeak_configs->get('trigger_button_size'),
+      'mobile_trigger_size' => $crownpeak_configs->get('mobile_trigger_size'),
+      'trigger_button_shape' => $crownpeak_configs->get('trigger_button_shape'),
+      'mobile_trigger_shape' => $crownpeak_configs->get('mobile_trigger_shape'),
+      'trigger_button_icon' => $crownpeak_configs->get('trigger_button_icon'),
+      'trigger_horizontal_offset' => $crownpeak_configs->get('trigger_horizontal_offset'),
+      'trigger_vertical_offset' => $crownpeak_configs->get('trigger_vertical_offset'),
+      'mobile_trigger_horizontal_offset' => $crownpeak_configs->get('mobile_trigger_horizontal_offset'),
+      'mobile_trigger_vertical_offset' => $crownpeak_configs->get('mobile_trigger_vertical_offset'),
     ],
   ];
 
   $renderer = \Drupal::service('renderer');
-  $crownpeak_js = $renderer->renderPlain($render_array_js);
+  return $renderer->renderPlain($render_array_js);
+}
+
+/**
+ * Generate JS based on form settings.
+ */
+function crownpeak_generate_js() {
+  $js_path = CROWNPEAK_JS_PATH;
+
+  $crownpeak_configs = \Drupal::config('crownpeak.settings');
+  $crownpeak_js = crownpeak_build_js($crownpeak_configs);
 
   // Generate suffix for new js file.
   $js_suffix = \Drupal::time()->getRequestTime();

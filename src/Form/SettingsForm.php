@@ -380,6 +380,15 @@ class SettingsForm extends ConfigFormBase {
       '#markup' => file_create_url($crownpeak_current_js),
     ];
 
+    $crownpeak_configs = \Drupal::config('crownpeak.settings');
+    $crownpeak_js = crownpeak_build_js($crownpeak_configs);
+
+    $form['debug']['generated_js'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Generated JS'),
+      '#markup' => "<pre>{$crownpeak_js}</pre>",
+    ];
+
     $form['#attached']['library'][] = 'crownpeak/crownpeak.admin';
 
     return parent::buildForm($form, $form_state);
