@@ -375,7 +375,8 @@ class SettingsForm extends ConfigFormBase {
     $crownpeak_current_js = CROWNPEAK_JS_PATH . '/crownpeak_' . $crownpeak_js_suffix . '.js';
 
     $form['debug']['info'] = [
-      '#type' => 'markup',
+      '#type' => 'fieldset',
+      '#title' => $this->t('Current generated JS'),
       '#markup' => file_create_url($crownpeak_current_js),
     ];
 
