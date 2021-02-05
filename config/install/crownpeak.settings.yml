@@ -1,0 +1,29 @@
+accessibility_statement_link: ''
+feedback_form_link: ''
+hide_trigger_button: 'false'
+interface_language: en
+interface_lead_color: '#003a5a'
+trigger_button_color: '#003a5a'
+interface_position: left
+hide_on_mobile: 'false'
+trigger_horizontal_position: left
+trigger_vertical_position: bottom
+mobile_trigger_horizontal_position: left
+mobile_trigger_vertical_position: center
+trigger_button_size: medium
+mobile_trigger_size: small
+trigger_button_shape: 50%
+trigger_mobile_shape: 10px
+trigger_button_icon: default
+trigger_horizontal_offset: '20'
+trigger_vertical_offset: '20'
+mobile_trigger_horizontal_offset: '0'
+mobile_trigger_vertical_offset: '0'
+mobile_trigger_shape: 50%
+visibility_request_path_mode: '0'
+visibility_request_path_pages: "/admin\r\n/admin/*\r\n/batch\r\n/node/add*\r\n/node/*/*\r\n/user/*/*"
+visibility_user_role_mode: '1'
+visibility_user_role_roles:
+  administrator: administrator
+  anonymous: 0
+  authenticated: 0
