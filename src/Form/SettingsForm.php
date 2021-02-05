@@ -201,14 +201,14 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Mobile Configuration'),
     ];
 
-    $form['mobile_configs']['show_on_mobile'] = [
+    $form['mobile_configs']['hide_on_mobile'] = [
       '#type' => 'select',
-      '#title' => $this->t('Show On Mobile?'),
+      '#title' => $this->t('Hide On Mobile?'),
       '#description' => $this->t('Select if widget should be shown for mobile devices.'),
-      '#default_value' => $configs->get('show_on_mobile'),
+      '#default_value' => $configs->get('hide_on_mobile'),
       '#options' => [
-        'true' => $this->t('Show'),
-        'false' => $this->t('Hide'),
+        'false' => $this->t('Show'),
+        'true' => $this->t('Hide'),
       ],
       '#required' => TRUE,
     ];
@@ -217,7 +217,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#states' => array(
         'visible' => array(
-          ':input[name="show_on_mobile"]' => array('value' => 'true'),
+          ':input[name="hide_on_mobile"]' => array('value' => 'false'),
         ),
       ),
     ];
@@ -404,7 +404,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('interface_lead_color', $values['interface_lead_color'])
       ->set('trigger_button_color', $values['trigger_button_color'])
       ->set('interface_position', $values['interface_position'])
-      ->set('show_on_mobile', $values['show_on_mobile'])
+      ->set('hide_on_mobile', $values['hide_on_mobile'])
       ->set('trigger_horizontal_position', $values['trigger_horizontal_position'])
       ->set('trigger_vertical_position', $values['trigger_vertical_position'])
       ->set('mobile_trigger_horizontal_position', $values['mobile_trigger_horizontal_position'])

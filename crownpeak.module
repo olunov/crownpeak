@@ -89,7 +89,7 @@ function crownpeak_generate_js() {
       'interface_lead_color' => $configs->get('interface_lead_color'),
       'trigger_button_color' => $configs->get('trigger_button_color'),
       'interface_position' => $configs->get('interface_position'),
-      'show_on_mobile' => $configs->get('show_on_mobile'),
+      'hide_on_mobile' => $configs->get('hide_on_mobile'),
       'trigger_horizontal_position' => $configs->get('trigger_horizontal_position'),
       'trigger_vertical_position' => $configs->get('trigger_vertical_position'),
       'mobile_trigger_horizontal_position' => $configs->get('mobile_trigger_horizontal_position'),
